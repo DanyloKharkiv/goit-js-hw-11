@@ -62,19 +62,21 @@ async function renderGalleryItems(searchRequest, searchPage) {
         const foundImagesQty = response.data.totalHits;
         const totalFoundImages = response.data.total;
         pages = Math.round(totalFoundImages / foundImagesQty);
-
         if (!totalFoundImages) {
             return Notify.info('Sorry, there are no images matching your search query. Please try again.');
         };
         if (!arrayOfImages.length) {
-           return Notify.failure("We're sorry, but you've reached the end of search results.");
+            return Notify.failure("We're sorry, but you've reached the end of search results.");
+            
         };
         if (page - 1 === 1) {
            Notify.success(`Hooray! We found ${foundImagesQty} images.`);
         };
         createGalleryItemsMarkup(arrayOfImages, gallery);
-        loadMoreBtn.classList.replace('hide', 'show');
-        showCheckBox();
+        if (arrayOfImages.length >= 40 && totalFoundImages > 40) {
+            loadMoreBtn.classList.replace('hide', 'show');
+            showCheckBox();
+        };
     } catch (error) {
         console.error(error.stack);  
     };
@@ -86,6 +88,8 @@ function incrementPage() {
 
 function resetGallery() {
     page = 1;
+    loadMoreBtn.classList.replace('show', 'hide');
+    hideCheckBox();
     gallery.innerHTML = '';
     infinityCheckBox.checked = false;
     intersectionObserver.unobserve(observerGuard);
