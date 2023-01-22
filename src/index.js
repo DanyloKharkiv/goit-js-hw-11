@@ -76,6 +76,8 @@ async function renderGalleryItems(searchRequest, searchPage) {
         if (arrayOfImages.length >= 40 && totalFoundImages > 40) {
             loadMoreBtn.classList.replace('hide', 'show');
             showCheckBox();
+        } else {
+            return Notify.failure("We're sorry, but you've reached the end of search results.");
         };
     } catch (error) {
         console.error(error.stack);  
